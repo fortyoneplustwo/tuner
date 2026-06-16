@@ -41,23 +41,34 @@ int main() {
   // must determine period
   w = BUFSZ / 4;
   peak = 0;
-  int start = 0; 
-	int end = 0;
-  int newpeak = 0;
+  int start = 0;
+  int end = 0;
+  int *ptr = &start;
+  // let k = the sum of the products
+  int maxsofar = 0;
+  int k = 0;
+
   // period idx2 - idx1;
   for (shift = 1; shift < w; shift++) {
-    // for steps = window size
-    // a b c d   a b c d a b c d
-    //   a b c   d a b c d a b c d
-    //    _____
     for (i = 0; i < w; i++) {
-      newpeak += input[i] * input[i + shift];
+      k += input[i] * input[i + shift];
     }
-    if (newpeak > peak) {
-      peak = newpeak;
-      start = shift;
+    if (shift == 1) {
+      maxsofar = k; // record first
+      continue;
+    }
+    if (k > maxsofar) {
+      maxsofar = k;
+      // record index of peak
+      *ptr = shift;
+    } else {
+      // we know that prevk is a peak
+      // start tracking end
+      ptr = &end;
     }
   }
 
+  // period = end - start (in num samples)
+  // calc freq using period
   return 0;
 }
