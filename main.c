@@ -64,11 +64,18 @@ int main() {
     } else {
       // we know that prevk is a peak
       // start tracking end
+      if (ptr == &end) {
+        break;
+      }
       ptr = &end;
     }
   }
 
   // period = end - start (in num samples)
   // calc freq using period
+  int period = end - start;
+  float frequency = (float)BITRATE / (float)period;
+  printf("period: %d\n", period);
+  printf("frequency: %f\n", frequency);
   return 0;
 }
