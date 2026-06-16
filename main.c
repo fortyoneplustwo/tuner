@@ -11,7 +11,7 @@
  * 				a ....
  *
  * buf1, buf2
- * sum(buf1[i] * buf2[i])
+ * sum(buf1[i] * buf2[i]) within a window
  * keep going until we hit second peak
  * samples between peak1 and peak2;
  *
@@ -24,6 +24,7 @@
  */
 
 int main() {
+  int w, shift, peak;
   // 44.1KHz = 44100 samples/s
   size_t i;
   double input[BUFSZ];
@@ -36,9 +37,27 @@ int main() {
     printf("%f\n", input[i]);
   }
 
-	// algorithm
-	// must determine period
-	
+  // algorithm
+  // must determine period
+  w = BUFSZ / 4;
+  peak = 0;
+  int start = 0; 
+	int end = 0;
+  int newpeak = 0;
+  // period idx2 - idx1;
+  for (shift = 1; shift < w; shift++) {
+    // for steps = window size
+    // a b c d   a b c d a b c d
+    //   a b c   d a b c d a b c d
+    //    _____
+    for (i = 0; i < w; i++) {
+      newpeak += input[i] * input[i + shift];
+    }
+    if (newpeak > peak) {
+      peak = newpeak;
+      start = shift;
+    }
+  }
 
   return 0;
 }
